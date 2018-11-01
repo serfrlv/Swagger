@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "name": "app",
+      "type": "com.shinesolutions.swagger.config.SwaggerClientProperties",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.connect-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "app.http-proxy-host",
+      "type": "java.lang.String",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties"
+    },
+    {
+      "name": "app.http-proxy-port",
+      "type": "java.lang.String",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties"
+    },
+    {
+      "name": "app.read-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "app.service-url",
+      "type": "java.lang.String",
+      "sourceType": "com.shinesolutions.swagger.config.SwaggerClientProperties"
+    }
+  ],
+  "hints": []
+}
