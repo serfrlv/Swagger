@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
@@ -25,5 +26,19 @@ public class CarShow {
     public CarShow(@JsonProperty("name")String name, @JsonProperty("cars")ArrayList<Car> cars) {
         this.name = name;
         this.cars = cars;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarShow carShow = (CarShow) o;
+        return Objects.equals(name, carShow.name) &&
+                Objects.equals(cars, carShow.cars);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, cars);
     }
 }

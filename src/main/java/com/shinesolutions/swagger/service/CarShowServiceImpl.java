@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.util.List;
 
 @Service
-public class CarShowServiceImpl implements EndpointService<CarShow> {
+public class CarShowServiceImpl implements IEndpointService<CarShow> {
 
     private RestTemplate restTemplate;
     private final String serviceUrl;
@@ -27,6 +27,7 @@ public class CarShowServiceImpl implements EndpointService<CarShow> {
     private String responseHeader = "";
     private int responseStatus = -1;
     private String responseContent = "";
+    private ResponseEntity<List<CarShow>> entity = null;
 
     @Autowired
     public CarShowServiceImpl(RestTemplateBuilder builder, final SwaggerClientProperties properties) {
@@ -38,7 +39,6 @@ public class CarShowServiceImpl implements EndpointService<CarShow> {
                 .add(new MappingJackson2HttpMessageConverter());
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
-
     @Override
     public String getResponseHeader(){
         return this.responseHeader;
@@ -51,16 +51,23 @@ public class CarShowServiceImpl implements EndpointService<CarShow> {
     public String getResponseContent(){
         return  this.responseContent;
     }
+    public ResponseEntity<List<CarShow>> getEntity() { return this.entity; }
 
     @Override
-    public ResponseEntity<List<CarShow>> getResponseEntity() throws Exception{
+    public boolean doGet() {
         ResponseEntity<List<CarShow>> entity = restTemplate.exchange(serviceUrl,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<CarShow>>(){});
-        this.responseContent = entity.getBody().toString();
-        this.responseHeader = entity.getHeaders().toString();
-        this.responseStatus = entity.getStatusCodeValue();
-        return entity;
+        if(entity.getStatusCode()!=null && entity.getStatusCode().is2xxSuccessful()) {
+            this.entity = entity;
+            this.responseContent = entity.getBody().toString();
+            this.responseHeader = entity.getHeaders().toString();
+            this.responseStatus = entity.getStatusCodeValue();
+            return true;
+        }else{
+            log.error("responseStatus is not successful!!");
+            return false;
+        }
     }
 }

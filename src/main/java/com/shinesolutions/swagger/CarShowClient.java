@@ -2,12 +2,12 @@ package com.shinesolutions.swagger;
 
 
 import com.shinesolutions.swagger.model.Car;
+import com.shinesolutions.swagger.model.CarModel;
 import com.shinesolutions.swagger.model.CarShow;
-import com.shinesolutions.swagger.service.CarShowServiceImpl;
+import com.shinesolutions.swagger.service.IEndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -20,12 +20,12 @@ public class CarShowClient {
 
     private static final Logger log = LoggerFactory.getLogger(CarShowClient.class);
     @Autowired
-    private CarShowServiceImpl carShowService;
+    private IEndpointService carShowService;
 
     public String getHeaders(){
         return carShowService.getResponseHeader();
     }
-//
+
     public String getResponseContent(){
         return carShowService.getResponseContent();
     }
@@ -34,15 +34,18 @@ public class CarShowClient {
             return carShowService.getResponseStatus();
     }
 
-    public List<Car> getCars() throws Exception {
-        List<Car> cars = new ArrayList<Car>();
+    public List<CarModel> getCarModelList(){
+        List<CarModel> CarModelList = new ArrayList<CarModel>();
         try {
-            ResponseEntity<List<CarShow>> entity = carShowService.getResponseEntity();
-            if(entity.getStatusCode()!=null && entity.getStatusCode().is2xxSuccessful()){
-                List<CarShow> carShows = entity.getBody();
+            if(carShowService.doGet()){
+               List<CarShow> carShows = (List<CarShow>) carShowService.getEntity().getBody();
                 for (CarShow carShow: carShows) {
                     for(Car car:carShow.getCars()){
-                        cars.add(car);
+                       CarModel carModel = new CarModel();
+                       carModel.setAttendName(carShow.getName()==null?"1":carShow.getName());
+                       carModel.setMakeName(car.getMake()==null?"1":car.getMake());
+                       carModel.setModelName(car.getMake()==null?"1":car.getModel());
+                       CarModelList.add(carModel);
                     }
                 }
             }
@@ -51,9 +54,10 @@ public class CarShowClient {
         }catch (RestClientException e){
             log.error("RestClientException");
         }catch (Exception e){
+            e.printStackTrace();
             log.error("Exception!");
         }
+        return CarModelList;
 
-        return cars;
     }
 }

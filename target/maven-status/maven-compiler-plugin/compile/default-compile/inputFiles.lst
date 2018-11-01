@@ -1,0 +1,9 @@
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/model/CarShow.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/model/CarModel.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/service/IEndpointService.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/service/CarShowServiceImpl.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/config/SwaggerClientProperties.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/CarShowClient.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/SwaggerApplication.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/model/Car.java
+/Users/jay/Documents/Git/swagger/src/main/java/com/shinesolutions/swagger/error/RestTemplateResponseErrorHandler.java

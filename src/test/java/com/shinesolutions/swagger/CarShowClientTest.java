@@ -1,12 +1,15 @@
 package com.shinesolutions.swagger;
 
 import com.shinesolutions.swagger.model.Car;
+import com.shinesolutions.swagger.model.CarModel;
 import com.shinesolutions.swagger.model.CarShow;
 import com.shinesolutions.swagger.service.CarShowServiceImpl;
+import com.shinesolutions.swagger.service.IEndpointService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
@@ -27,12 +30,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class CarShowClientTest {
 
     private final Logger logger = LoggerFactory.getLogger(CarShowClientTest.class);
-    @Autowired
+    @InjectMocks
+    private CarShowClient carShowClient;
+    @Mock
     private CarShowServiceImpl mockServer;
 
     @Before
     public void setUp() throws Exception {
-        logger.info("SETUP START");
         ArrayList<Car> carlist1 = new ArrayList<Car>();
         Car car1 = new Car("Julio Mechannica","Mark 4S");
         carlist1.add(car1);
@@ -62,23 +66,27 @@ public class CarShowClientTest {
         ArrayList<CarShow> carShowArrayList = new ArrayList<CarShow>();
         carShowArrayList.add(show1);
         carShowArrayList.add(show2);
-        mockServer = mock(CarShowServiceImpl.class);
-//        when(mockServer.getResponseStatus()).thenReturn(200);
-        when(mockServer.getResponseEntity()).thenReturn(new ResponseEntity<List<CarShow>>(carShowArrayList, HttpStatus.ACCEPTED));
-        logger.info("SETUP END!");
+        when(mockServer.doGet()).thenReturn(true);
+        when(mockServer.getResponseStatus()).thenReturn(200);
+        when(mockServer.getEntity()).thenReturn(new ResponseEntity<List<CarShow>>(carShowArrayList, HttpStatus.ACCEPTED));
+    }
+    @Test
+    public void responseStatusCode_200() throws Exception{
+        when(mockServer.getResponseStatus()).thenReturn(200);
+        Assert.assertEquals(carShowClient.getStatusCode(),200);
     }
 
     @Test
     public void responseStatusCode_500() throws Exception{
         when(mockServer.getResponseStatus()).thenReturn(500);
-        Assert.assertEquals(new CarShowClient().getStatusCode(),500);
+        Assert.assertEquals(carShowClient.getStatusCode(),500);
     }
 
     @Test
     public void getCarNumberTest() throws Exception{
-        when(mockServer.getResponseStatus()).thenReturn(200);
-        ResponseEntity<List<CarShow>> entity = mockServer.getResponseEntity();
-        ArrayList<Car> cars = (ArrayList<Car>) new CarShowClient().getCars();
-        Assert.assertEquals(cars.size(),11);
+        ArrayList<CarModel> carModels = (ArrayList<CarModel>) carShowClient.getCarModelList();
+        Assert.assertEquals(carModels.size(),11);
     }
+
+
 }
